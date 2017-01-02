@@ -1,52 +1,62 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://gitter.im/vuejs/vue" target="_blank">Gitter Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+  <div class="stage">
+    <photo class="figure" v-for="image in images" :image="image"></photo>
+    <nav>
+      <ul class="navs">
+        <li class="nav" v-for="n in images.length">{{n}}</li>
+      </ul>
+    </nav>
   </div>
 </template>
 
 <script>
+import data from '../data/images.json';
+import Photo from './Photo.vue';
+
+function getImages(data) {
+  data.forEach((item) => {
+    let degrade = Math.random() * 90 - 45
+    item.src = './' + item.src
+    item.style = {
+      left: '20px',
+      top: '20px',
+      transform: `rotateZ(${degrade}deg)`
+    }
+  })
+  return data
+}
+
 export default {
-  name: 'app',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      images: getImages(data)
     }
+  },
+  components: {
+    Photo
   }
 }
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style lang="scss">
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  margin: 0;
 }
 
 h1, h2 {
   font-weight: normal;
+  margin: 0;
 }
 
 ul {
   list-style-type: none;
   padding: 0;
+  margin: 0;
 }
 
 li {
@@ -54,7 +64,27 @@ li {
   margin: 0 10px;
 }
 
-a {
-  color: #42b983;
+.stage {
+  height: 100%;
+  background: #eee;
+
+  .navs {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 50px;
+    text-align: center;
+  }
+
+  .nav {
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    background: #222;
+    color: #fff;
+    text-align: center;
+    font-size: 12px;
+  }
 }
 </style>
