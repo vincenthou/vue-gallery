@@ -25,6 +25,7 @@ export default {
   top: 0;
   background: #fff;
   padding: 20px;
+  margin: 0;
 
   .image {
     width: 200px;
