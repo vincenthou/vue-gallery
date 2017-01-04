@@ -1,10 +1,10 @@
 <template>
-  <figure class="figure" :style="photoStyle" @click="rotate()">
+  <figure class="figure" :class="{flipped:flipped}" :style="{left:photoStyle.left, top:photoStyle.top, transform:photoStyle.transform}" @click="rotate()">
     <img class="photo" :src="src" :alt="title"/>
     <figcaption class="figure-caption">
       <h2>{{title}}</h2>
-      <p>{{description}}</p>
     </figcaption>
+    <p class="description">{{description}}</p>
   </figure>
 </template>
 
@@ -36,11 +36,15 @@ export default {
       required: true
     }
   },
+  data () {
+    return {
+      flipped: false
+    }
+  },
   methods: {
     rotate () {
-      console.log(this.isActive)
       if (this.isActive) {
-        this.photoStyle.transform = 'rotateY(180deg)'
+        this.flipped = !this.flipped
       } else {
         this.$emit('photoSelected', this.idx)
       }
@@ -64,6 +68,12 @@ export default {
     cursor: pointer;
   }
 
+  &.flipped {
+    transform-style: preserve-3d;
+    transform-origin: 0 50% 0;
+    transform: translate(280px) rotateY(180deg);
+  }
+
   .photo {
     width: 200px;
     height: 200px;
@@ -72,6 +82,19 @@ export default {
   .figure-caption {
     margin-top: 20px;
     font-size: 14px;
+  }
+
+  .description {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 40px;
+    background: #fff;
+    box-sizing: border-box;
+    transform: rotateY(180deg) translateZ(1px);
+    backface-visibility: hidden;
   }
 }
 </style>
