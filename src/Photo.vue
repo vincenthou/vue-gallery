@@ -1,8 +1,9 @@
 <template>
-  <figure class="figure" :style="image.style">
-    <img class="image" :src="image.src" :alt="image.title"/>
+  <figure class="figure" :style="photoStyle" @click="rotate()">
+    <img class="photo" :src="src" :alt="title"/>
     <figcaption class="figure-caption">
-      <h2>{{image.title}}</h2>
+      <h2>{{title}}</h2>
+      <p>{{description}}</p>
     </figcaption>
   </figure>
 </template>
@@ -10,9 +11,39 @@
 <script>
 export default {
   props: {
-    image: {
+    idx: {
+      type: Number,
+      required: true
+    },
+    src: {
+      type: String,
+      required: true
+    },
+    title: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      required: true
+    },
+    isActive: {
+      type: Boolean,
+      required: true
+    },
+    photoStyle: {
       type: Object,
       required: true
+    }
+  },
+  methods: {
+    rotate () {
+      console.log(this.isActive)
+      if (this.isActive) {
+        this.photoStyle.transform = 'rotateY(180deg)'
+      } else {
+        this.$emit('photoSelected', this.idx)
+      }
     }
   }
 }
@@ -24,10 +55,16 @@ export default {
   left: 0;
   top: 0;
   background: #fff;
-  padding: 20px;
+  padding: 40px;
   margin: 0;
+  box-shadow: 2px 2px 8px #ccc;
+  transition: ease 1s;
 
-  .image {
+  &:hover {
+    cursor: pointer;
+  }
+
+  .photo {
     width: 200px;
     height: 200px;
   }
