@@ -1,19 +1,20 @@
 <template>
   <div id="app" class="stage">
     <photo v-for="photo in photos"
-      v-on:photoSelected="changePhoto($event+1)"
+      v-on:photoClicked="clickNav($event+1)"
       :idx="photo.idx"
       :src="photo.src"
       :title="photo.title"
       :description="photo.description"
       :is-active="photo.isActive"
+      :is-flipped="photo.isFlipped"
       :photo-style="photo.style"
     ></photo>
     <nav>
       <ul class="navs">
         <li class="nav" v-for="n in photos.length"
-          :class="{active: n-1==centerPhotoIdx}"
-          @click="changePhoto(n)"
+          :class="{active: n-1==centerPhotoIdx, flipped: n-1==centerPhotoIdx&&centerPhotoFlipped}"
+          @click="clickNav(n)"
         ></li>
       </ul>
     </nav>
@@ -40,6 +41,7 @@ export default {
   data () {
     return {
       centerPhotoIdx: -1,
+      centerPhotoFlipped: false,
       photos: [],
       stage: {
         halfWidth: 0,
@@ -60,6 +62,14 @@ export default {
     Photo
   },
   methods: {
+    clickNav (n) {
+      if (n-1 == this.centerPhotoIdx) {
+        this.photos[n-1].isFlipped = !this.photos[n-1].isFlipped
+        this.centerPhotoFlipped=!this.centerPhotoFlipped
+      } else {
+        this.changePhoto(n)
+      }
+    },
     changePhoto (n) {
       this.centerPhotoIdx = n - 1
       this.arrangePhotos(photos)
@@ -127,6 +137,7 @@ export default {
         item.src = './' + item.src
         item.idx = idx
         item.isActive = this.centerPhotoIdx == idx
+        item.isFlipped = false
         if (item.isActive) {
           item.style = {
             left: this.stage.halfWidth - this.photo.halfWidth + 'px',
@@ -180,7 +191,9 @@ li {
   position: relative;
   overflow: hidden;
   height: 100%;
-  background: #eee;
+  background-color: #eee;
+
+  perspective: 1800px;
 
   .navs {
     position: absolute;
@@ -194,18 +207,35 @@ li {
     border-radius: 50%;
     width: 20px;
     height: 20px;
-    background: #aaa;
+    background-color: #aaa;
     color: #fff;
     text-align: center;
+    vertical-align: middle;
     font-size: 12px;
+    transition: transform .6s ease-in-out, background-color .6s ease-in-out;
 
     &:hover {
       cursor: pointer;
     }
 
     &.active {
-      border: 1px solid #fff;
+      background-color: #888;
       transform: scale(1.5);
+
+      &:after {
+        content: "";
+        font-family:"iconfont";
+        line-height: 20px;
+        font-style:normal;
+        -webkit-font-smoothing: antialiased;
+        -webkit-text-stroke-width: 0.2px;
+        -moz-osx-font-smoothing: grayscale;
+      }
+    }
+
+    &.flipped {
+      background-color: #555;
+      transform: scale(1.5) rotateY(180deg);
     }
   }
 }
