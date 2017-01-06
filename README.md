@@ -1,6 +1,6 @@
-# test
+# Vue Gallery
 
-> A Vue.js project
+> Photo gallery demo using vuejs 2.0
 
 ## Build Setup
 
@@ -12,7 +12,18 @@ npm install
 npm run dev
 
 # build for production with minification
-npm run build
+# all the assets are placed under dist folder
+npm run dist
+
+# Deploy the project to gh-pages branch for demo
+npm run deploy
 ```
 
 For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+## Demo
+
+Online address: https://vincenthou.github.io/vue-gallery
+
+![screencast](screencast.gif)
+
